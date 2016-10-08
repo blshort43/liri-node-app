@@ -13,7 +13,7 @@ function tweetsList() {
         console.log("\n");
         console.log("--------------------Search Results--------------------")
 
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 20; i++) {
             console.log(tweets[i].text + '\n' + "Created on: " + tweets[i].created_at + '\n');
         }
 
