@@ -4,23 +4,28 @@ var request = require('request');
 var Twitter = require('twitter');
 var spotify = require('spotify');
 var client = new Twitter(keysVar);
+var movieName = "http://www.omdbapi.com/?t=" + process.argv.slice(3).join(" ") + "&y=&plot=short&tomatoes=true&r=json"
+var query = process.argv.slice(3).join(" ")
 
 // Twitter code:
-if (process.argv[2] === "my-tweets") {
-
+function tweetsList() {
     client.get('statuses/user_timeline', { screen_name: "JimGaffigan", count: 5 }, function(error, tweets, response) {
+        console.log("\n");
+        console.log("--------------------Search Results--------------------")
 
         for (var i = 0; i < 5; i++) {
             console.log(tweets[i].text + '\n' + "Created on: " + tweets[i].created_at + '\n');
         }
+
+        console.log("------------------------------------------------------");
+        console.log("\n");
     });
 };
 
 // Spotify code:
-if (process.argv[2] === "spotify-this-song") {
-    query = process.argv.slice(3).join(" ")
-    console.log(query);
-    spotify.search({ type: 'track', query }, function(err, data) {
+function spotifySearch() {
+	if (process.argv[2] && process.argv[3]) {
+	spotify.search({ type: 'track', query }, function(err, data) {
         //log any errors
         if (err) {
             console.log('Error occurred: ' + err);
@@ -38,7 +43,7 @@ if (process.argv[2] === "spotify-this-song") {
         }
     });
 
-} else if ((process.argv[2] === "spotify-this-song") && (query === " ")) {
+} else if (process.argv[2]) {
 
     spotify.lookup({ type: 'album', id: '37UgOnkBN4ZfY1nBoSCL9L' }, function(err, data) {
         //log any errors
@@ -58,10 +63,9 @@ if (process.argv[2] === "spotify-this-song") {
         }
     });
 };
+}
 
 //OMDB code:
-movieName = "http://www.omdbapi.com/?t=" + process.argv.slice(3).join(" ") + "&y=&plot=short&tomatoes=true&r=json"
-
 function movieSearch() {
     if (process.argv[2] && process.argv[3]) {
         request(movieName, function(error, response, body) {
@@ -79,12 +83,11 @@ function movieSearch() {
                 console.log("Plot: " + JSON.parse(body)["Plot"]);
                 console.log("------------------------------------------------------");
                 console.log("\n");
-
             };
         });
-    }else if (process.argv[2]) {
-    	console.log("\n");
-    	console.log("--------------------Search Results--------------------");
+    } else if (process.argv[2]) {
+        console.log("\n");
+        console.log("--------------------Search Results--------------------");
         console.log('If you haven\'t watched "Mr. Nobody," then you should: http://www.imdb.com/title/tt0485947/' + "\n" +
             'It\'s on Netflix!');
         console.log("------------------------------------------------------");
@@ -93,6 +96,10 @@ function movieSearch() {
 };
 
 
-if (process.argv[2] === "movie-this") {
+if (process.argv[2] === "my-tweets") {
+    tweetsList();
+}else if (process.argv[2] === "spotify-this-song") {
+    spotifySearch();
+}else if (process.argv[2] === "movie-this") {
     movieSearch();
-}
+};
