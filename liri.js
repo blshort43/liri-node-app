@@ -9,6 +9,7 @@ var movieName = "http://www.omdbapi.com/?t=" + process.argv.slice(3).join(" ") +
 var query = process.argv.slice(3).join(" ")
 var count = 0;
 
+
 // Twitter code:
 function tweetsList() {
     client.get('statuses/user_timeline', { screen_name: "JimGaffigan", count: 20 }, function(error, tweets, response) {
@@ -50,16 +51,17 @@ function movieSearch() {
     if (process.argv[2] && process.argv[3]) {
         request(movieName, function(error, response, body) {
             if (!error && response.statusCode == 200) {
+                var movie = JSON.parse(body);
                 console.log("\n--------------------Search Results--------------------");
-                console.log("Movie Title: " + JSON.parse(body)["Title"]);
-                console.log("Release Year: " + JSON.parse(body)["Year"]);
-                console.log("Cast: " + JSON.parse(body)["Actors"]);
-                console.log("Country: " + JSON.parse(body)["Country"]);
-                console.log("Language: " + JSON.parse(body)["Language"]);
-                console.log("IMDb Rating: " + JSON.parse(body)["imdbRating"]);
-                console.log("Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"]);
-                console.log("Rotten Tomatoes Link: " + JSON.parse(body)["tomatoURL"]);
-                console.log("Plot: " + JSON.parse(body)["Plot"]);
+                console.log("Movie Title: " + movie.Title);
+                console.log("Release Year: " + movie.Year);
+                console.log("Cast: " + movie.Actors);
+                console.log("Country: " + movie.Country);
+                console.log("Language: " + movie.Language);
+                console.log("IMDb Rating: " +  movie.imdbRating);
+                console.log("Rotten Tomatoes Rating: " + movie.tomatoRating);
+                console.log("Rotten Tomatoes Link: " + movie.tomatoURL);
+                console.log("Plot: " + movie.Plot);
                 console.log("------------------------------------------------------\n");
             };
         });
