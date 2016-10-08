@@ -6,15 +6,17 @@ var spotify = require('spotify');
 var client = new Twitter(keysVar);
 var movieName = "http://www.omdbapi.com/?t=" + process.argv.slice(3).join(" ") + "&y=&plot=short&tomatoes=true&r=json"
 var query = process.argv.slice(3).join(" ")
+var count = 0;
 
 // Twitter code:
 function tweetsList() {
     client.get('statuses/user_timeline', { screen_name: "JimGaffigan", count: 20 }, function(error, tweets, response) {
         console.log("\n");
-        console.log("--------------------Search Results--------------------")
+        console.log("--------------------Tweet List------------------------");
 
         for (var i = 0; i < 20; i++) {
-            console.log(tweets[i].text + '\n' + "Created on: " + tweets[i].created_at + '\n');
+            count++;
+            console.log("Tweet " + count + ": " + tweets[i].text + '\n' + "Created on: " + tweets[i].created_at + '\n');
         }
 
         console.log("------------------------------------------------------");
