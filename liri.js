@@ -3,10 +3,9 @@ var keysVar = require('./keys.js');
 var request = require('request');
 var Twitter = require('twitter');
 var spotify = require('spotify');
-
-
 var client = new Twitter(keysVar);
 
+// Twitter code:
 if (process.argv[2] === "my-tweets") {
 
     client.get('statuses/user_timeline', { screen_name: "JimGaffigan", count: 5 }, function(error, tweets, response) {
@@ -17,15 +16,16 @@ if (process.argv[2] === "my-tweets") {
     });
 };
 
-
-if (query = process.argv.slice(2).join(" ")) {
-	console.log(query);
+// Spotify code:
+if (process.argv[2] === "spotify-this-song") {
+    query = process.argv.slice(3).join(" ")
+    console.log(query);
     spotify.search({ type: 'track', query }, function(err, data) {
-    	//log any errors
+        //log any errors
         if (err) {
             console.log('Error occurred: ' + err);
             return;
-        //run search results
+            //run search results
         } else if (!err) {
             console.log("\n");
             console.log("--------------------Search Results--------------------");
@@ -38,14 +38,14 @@ if (query = process.argv.slice(2).join(" ")) {
         }
     });
 
-} else if (query = " ") {
+} else if ((process.argv[2] === "spotify-this-song") && (query === " ")) {
 
     spotify.lookup({ type: 'album', id: '37UgOnkBN4ZfY1nBoSCL9L' }, function(err, data) {
-    	//log any errors
+        //log any errors
         if (err) {
             console.log('Error occurred: ' + err);
             return;
-        //run search results
+            //run search results
         } else if (!err) {
             console.log("\n");
             console.log("--------------------Search Results--------------------");
@@ -58,3 +58,41 @@ if (query = process.argv.slice(2).join(" ")) {
         }
     });
 };
+
+//OMDB code:
+movieName = "http://www.omdbapi.com/?t=" + process.argv.slice(3).join(" ") + "&y=&plot=short&tomatoes=true&r=json"
+
+function movieSearch() {
+    if (process.argv[2] && process.argv[3]) {
+        request(movieName, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                console.log("\n");
+                console.log("--------------------Search Results--------------------");
+                console.log("Movie Title: " + JSON.parse(body)["Title"]);
+                console.log("Release Year: " + JSON.parse(body)["Year"]);
+                console.log("Cast: " + JSON.parse(body)["Actors"]);
+                console.log("Country: " + JSON.parse(body)["Country"]);
+                console.log("Language: " + JSON.parse(body)["Language"]);
+                console.log("IMDb Rating: " + JSON.parse(body)["imdbRating"]);
+                console.log("Rotten Tomatoes Rating: " + JSON.parse(body)["tomatoRating"]);
+                console.log("Rotten Tomatoes Link: " + JSON.parse(body)["tomatoURL"]);
+                console.log("Plot: " + JSON.parse(body)["Plot"]);
+                console.log("------------------------------------------------------");
+                console.log("\n");
+
+            };
+        });
+    }else if (process.argv[2]) {
+    	console.log("\n");
+    	console.log("--------------------Search Results--------------------");
+        console.log('If you haven\'t watched "Mr. Nobody," then you should: http://www.imdb.com/title/tt0485947/' + "\n" +
+            'It\'s on Netflix!');
+        console.log("------------------------------------------------------");
+        console.log("\n");
+    };
+};
+
+
+if (process.argv[2] === "movie-this") {
+    movieSearch();
+}
