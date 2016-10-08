@@ -9,7 +9,7 @@ var query = process.argv.slice(3).join(" ")
 
 // Twitter code:
 function tweetsList() {
-    client.get('statuses/user_timeline', { screen_name: "JimGaffigan", count: 5 }, function(error, tweets, response) {
+    client.get('statuses/user_timeline', { screen_name: "JimGaffigan", count: 20 }, function(error, tweets, response) {
         console.log("\n");
         console.log("--------------------Search Results--------------------")
 
